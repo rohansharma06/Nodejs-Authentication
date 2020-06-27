@@ -1,4 +1,13 @@
-
-<h1>
-    You are at home Page!!!
-</h1>
+<link rel="stylesheet" href="/css/home.css">
+<% if(locals.user) {%>
+    <div class="container">
+        <h1> Hellow! <span> <%= user.name %> </span> </h1>
+        <h1>This is your home page</h1>
+    </div>
+    
+<% } else {%>
+    <div class="container">
+        <h1>Home page</h1>
+    </div>
+    
+<%}%>

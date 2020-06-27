@@ -7,12 +7,21 @@
 
   <div class="collapse navbar-collapse positionRight" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/sign-up">Sign Up </a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="/sign-in">Sign In</a>
-      </li>
+      <% if(locals.user) {%>
+        <li class="nav-item active">
+          <a class="nav-link " id="userName" href="/users/profile/<%= locals.user.id%>"> <%= locals.user.name %> </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/users/sign-out">Sign Out </a>
+        </li>
+      <% } else {%>
+        <li class="nav-item active">
+          <a class="nav-link" href="/users/sign-up">Sign Up </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/users/sign-in">Sign In</a>
+        </li>
+      <% } %>
     </ul>
   </div>
 </nav>
