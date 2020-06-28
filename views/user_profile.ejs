@@ -1,9 +1,7 @@
-<link rel="stylesheet" href="/css/user_profile.css">
-
-<h1>Profile page</h1>
-<h1>Reset Password: </h1>
+<link rel="stylesheet" href="/css/common.css">
 
 <form action="/users/reset/<%= user.id%>" class="signin-form" method="POST">
+    <h1>Change Password: </h1>
     <div class="form-group">
         <label for="exampleInputPassword1">Current Password</label>
         <input type="password" name="current_password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
@@ -18,3 +16,15 @@
     </div>
     <button type="submit" class="btn btn-primary">Reset</button>
 </form>
+
+<div class="break">
+  <hr id="onee">
+  <span>OR</span>
+  <hr id="onee">
+</div>
+
+<div class="google-auth">
+  <a href="/users/forgot-password">
+    <img src="https://image.flaticon.com/icons/svg/2702/2702602.svg">
+  </a>
+</div>

@@ -2,11 +2,14 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
 
+//authentication using passport
 passport.use(new LocalStrategy({
         usernameField: 'email',
         passReqToCallback:true
     },
+    //----done is passport callback function we can also use our own!
     function(req,email, password, done){
+       //find the user and establish the identity
         User.findOne({email: email}, function(err, user){
             if(err){
                 req.flash('error',err);
@@ -18,12 +21,13 @@ passport.use(new LocalStrategy({
                 //console.log('Invalid Username/Password');
                 return done(null, false);
             }
+
             return done(null, user);
         });
     }
 ));
 
-//--- serializing the user
+//--- serializing/derypt user identity i cookies
 passport.serializeUser(function(user, done){
     done(null, user.id);
 });

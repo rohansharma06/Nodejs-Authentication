@@ -1,5 +1,14 @@
 const User = require('../models/user');
 
+//---- use for sending mail
+const forgotPasswordMailer = require('../mailers/forgot_password_mailer');
+const welcomeMailer = require('../mailers/welcome_mailer');
+
+//---- use to encryption
+const crypto = require('crypto'); 
+
+
+//---- display user profile
 module.exports.profile = function(req, res){
     User.findById(req.params.id, function(err, user){
         return res.render('user_profile', {
@@ -31,6 +40,7 @@ module.exports.signUp = function(req,res){
     });
 }
 
+//---- create user and store it in db
 module.exports.create = function(req,res){
     console.log(req.body);
     //---- if pass and confirm pass does't match
@@ -56,7 +66,8 @@ module.exports.create = function(req,res){
                 if(err){console.log("error in creating user"); return;}
                 return res.redirect('/users/sign-in');
             })
-            
+            //console.log("email:",user);
+            welcomeMailer.welcome(req.body);
         }
         else{
             // req.flash('success', 'You have signed up, login to continue!');
@@ -66,12 +77,14 @@ module.exports.create = function(req,res){
     })
 }
 
-//----Create user seesion when SignIn
+//----Create user session when SignIn
 module.exports.createSession=function(req,res){
-    req.flash('success','Logged in successfully');
-    return res.redirect('/');
+        //console.log("check",req.body);
+        req.flash('success','Logged in successfully');
+        return res.redirect('/');
 }
 
+//--- destroy session when sign-out
 module.exports.destroySession = function(req,res){
     req.logout();
     req.flash('success','Sign Out successfully');
@@ -85,9 +98,10 @@ module.exports.reset = async function(req,res){
         try{
             let user = await User.findById(req.params.id);
 
-            if(user.password == req.body.current_password){
+            if(user.validPassword(req.body.current_password)){
                 if(req.body.new_password == req.body.confirm_password){
-                    user.password = req.body.new_password;
+                    //user.password = req.body.new_password;
+                    user.setPassword(req.body.new_password);
                     req.flash('success', 'Successfully change pasword');
                 }else{
                     req.flash('error', 'Password and Confirm password does not match!! ');
@@ -104,4 +118,39 @@ module.exports.reset = async function(req,res){
             return res.redirect('back');
         }
     }
+}
+
+//--- forgotpass
+module.exports.forgotPass = function(req,res){
+    res.render('forgoten_password',{
+        title: "Forgotten Password"
+    });
+}
+
+//---- sending mail to reset password
+module.exports.resetMail = async function(req,res){
+    console.log(req.body.email);
+    try{
+       User.findOne({email: req.body.email}, function(err,user){
+           if(err){
+            req.flash('error', err);
+            return;
+           }
+           if(!user){
+                req.flash('error','Invalid Email!!');
+                return res.redirect('back');
+           }
+            //console.log(user);
+            let new_password = crypto.randomBytes(20).toString('hex');
+            user.setPassword(new_password);
+            //console.log(new_password);
+            forgotPasswordMailer.forgotPassword(user, new_password);
+            req.flash('success','Check your Email.');
+            user.save();
+            return res.redirect('/users/sign-in');
+       })
+    }catch(err){
+        req.flash('error','Invalid Email Id');
+    }
+   
 }
