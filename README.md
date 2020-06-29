@@ -15,6 +15,7 @@ A complete authentication system which can be used as a starter code for creatin
 * On submit user redirect to sign-in page.
 * User also can use google for sign-in.
 * User also get Welcom mail from us.
+* Google reChapcha V3 is also use here.
 
     ![Homepage](/assets/images/signup.JPG)
 
@@ -22,22 +23,27 @@ A complete authentication system which can be used as a starter code for creatin
     
 * Sign-In page contains two fields email and password.
 * User can sign in using Google.
-* If user forget password he can use his email to get new password. 
+* Google reChapcha V3 is also use here.
 
     ![Sign-In](/assets/images/signin.JPG)
 
+* If user forget password he can use his email to get new password. 
+* Mail is send to the verified user which contains a random password which he/she can use to reset password.
+
     ![forgot pass](/assets/images/forgetpass.JPG)
+
 
 ` Profile: `
     
 * After logn user redirect to his profile page.
-* Simple page welcom user.
+* Simple page welcome user.
 
     ![Homepage](/assets/images/profile.JPG)
 
 ` Reset-Password: `
     
 * If user want to rest his/her password so he can reset his password.
+* Mail is send to the verified user which contains a random password which he/she can use to reset password.
 * User can also rest his password using google.
 
     ![Homepage](/assets/images/changepass.JPG)
@@ -58,12 +64,14 @@ A complete authentication system which can be used as a starter code for creatin
 2. Go to folder.
 3. Run following command.
     ``` 
-    npm install express
-    npm install ejs
+    npm install bcrypt
+    npm install body-parser
     npm install connect-flash 
     npm install connect-mongo
     npm install cookie-parser 
     npm install crypto 
+    npm install ejs
+    npm install express
     npm install express-ejs-layouts
     npm install express-session
     npm install mongoose 
@@ -71,13 +79,15 @@ A complete authentication system which can be used as a starter code for creatin
     npm install passport
     npm install passport-google-oauth 
     npm install passport-local
+     npm install request
 
     ```
 4. Connect to mongodb.
-5. Give user credentials in config > passorport-google-outh2.
-6. Give your mail credentials in config > nodemailer
-7. Run command: `npm start`
-8. Go to https://localhost/8000 to use the application.
-9. Happy Learning 
+5. Give user credentials in `config > passorport-google-outh2`.
+6. Give your mail credentials in `config > nodemailer`
+8. Also change google reChapcha site key and seceret key.
+9. Run command: `npm start`
+10. Go to https://localhost/8000 to use the application.
+11. Happy Learning 
 
 
