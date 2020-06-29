@@ -16,6 +16,9 @@ const MongoStore= require('connect-mongo')(session); //---- to store user sessio
 const flash = require('connect-flash');
 const customeMware = require('./config/middleware');
 
+//capche
+const bodyParser = require('body-parser');
+const request = require('request');
 
 //---- access data from URL and Cookies 
     app.use(express.urlencoded());
@@ -25,6 +28,10 @@ const customeMware = require('./config/middleware');
 //access all the static file
     app.use(express.static('./assets'));
   
+// for captcha
+    app.use(bodyParser.urlencoded({extended:false}));
+    app.use(bodyParser.json());
+    
 //use express layout (we have to do this first coz before going to route first it will know about layout)
     app.use(expressLayout);
 

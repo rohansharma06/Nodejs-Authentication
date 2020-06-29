@@ -6,7 +6,11 @@ const welcomeMailer = require('../mailers/welcome_mailer');
 
 //---- use to encryption
 const crypto = require('crypto'); 
+const request = require('request');
+// const { request } = require('http');
 
+//---- seceret key for capche
+const secretKey = 'reCAPTCHA_seceret_key';
 
 //---- display user profile
 module.exports.profile = function(req, res){
@@ -147,10 +151,38 @@ module.exports.resetMail = async function(req,res){
             forgotPasswordMailer.forgotPassword(user, new_password);
             req.flash('success','Check your Email.');
             user.save();
-            return res.redirect('/users/sign-in');
+            return res.redirect('back');
        })
     }catch(err){
         req.flash('error','Invalid Email Id');
     }
    
+}
+
+//---- Validate captcha
+module.exports.captchaValidate = function(req,res){
+    
+    if(!req.body.captcha){
+        return res.json({"success":false, "msg":"Invalid Capthca"});
+    }
+
+    const Url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}`;
+     
+    request(Url, (err, response, body) => {
+        //---- if url not match
+        if(err){
+            console.log(err);
+        }
+
+        body = JSON.parse(body);
+        console.log("Captcha Status:",body);
+        if(!body.success && body.success === undefined){
+            return res.json({"success":false, "msg":"captcha verification failed"});
+        }
+        else if(body.score < 0.5){  // 0.5= By default, threshold
+            return res.json({"success":false, "msg":"you might be a bot, sorry!", "score": body.score});
+            
+        }
+        return res.json({"success":true, "msg":"captcha verification passed", "score": body.score});
+    })
 }

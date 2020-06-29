@@ -40,4 +40,8 @@ router.get('/forgot-password', usersController.forgotPass);
 //--- route to sending make to reset pass 
 router.post('/resetMail', usersController.resetMail);
 
+//---- validate capche
+router.post("/captchaValidate", usersController.captchaValidate);
+
+
 module.exports = router;
