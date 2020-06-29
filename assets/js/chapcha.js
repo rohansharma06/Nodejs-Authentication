@@ -1,4 +1,4 @@
-
+//---- first auth capcha then call action control
 let runVerify = async function(e) {
     //--- stop default submit action
     e.preventDefault();
